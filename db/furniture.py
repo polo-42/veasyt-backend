@@ -1,15 +1,6 @@
 import mysql.connector
 from db.base import baseModel
 
-mydb = mysql.connector.connect(
-    host="amenitydev-veasyt.mysql.database.azure.com",
-    user="amenitydev",
-    password="woYASh$7$B6g866w",
-    database="veasyt_db"
-)
-
-cursor = mydb.cursor(buffered=True)
-
 #TODO: CREATE TABLE FOR MULTIPLE CATEGORIES
 
 class Furniture(baseModel):
