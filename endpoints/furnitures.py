@@ -3,7 +3,7 @@ from flask_cors import cross_origin
 
 from db.furniture import FurnitureDefault
 
-inventory_endpoint = Blueprint('furniture', __name__)
+inventory_endpoint = Blueprint('inventory', __name__)
 
 @inventory_endpoint.route('/', methods=['POST'])
 @cross_origin()

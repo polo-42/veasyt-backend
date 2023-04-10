@@ -39,21 +39,29 @@ class FurnitureDefault(Furniture):
         """)
 
         object =  cursor.fetchone()
-        furniture = FurnitureDefault(None, data["quantity"], object[0], object[1], object[2], object[3], data["id_catalogue"], data["id_room"], data["id_unload_address"])
+        furniture = FurnitureDefault(None, data["quantity"], object[0], object[1], object[2], object[3], object[4], data["id_catalogue"], data["id_room"], data["id_unload_address"])
         return furniture
     
     def save(self):
-        request = f""""
-        INSERT INTO Meuble_client (est_avance, quantite, id_piece, id_adresse) VALUES (0, {self.quantity}, {self.id_room}, {self.id_unload_address})   
+        request = f"""
+        INSERT INTO Meuble_client (est_avance, quantite, id_piece, id_adresse_dechargement) VALUES (0, {self.quantity}, {self.id_room}, {self.id_unload_address})   
         """
         cursor.execute(request)
-        id_furniture = cursor.execute('SELECT LAST_INSERT_ID()')      
+        mydb.commit()
 
-        cursor.execute(f""""
-        INSERT INTO Meuble_client_defaut ({id_furniture}, {self.id_catalogue})
+        cursor.execute('SELECT LAST_INSERT_ID()')      
+        id_furniture = cursor.fetchone()[0]
+        # cursor.fetchall() au cas ou il y a une erreur
+
+        request = (f"""
+        INSERT INTO Meuble_client_defaut (id_meuble_client, id_meuble_catalogue) VALUES ({id_furniture}, {self.id_catalogue})
         """)
+        cursor.execute(request)
         mydb.commit()
         return id_furniture
+    
+    def getAll():
+        pass
 
 class FurnitureCustom(Furniture):
     def __init__(self,id,quantity,name,weight,width,length,height,id_catalogue,id_room,id_unload_address):

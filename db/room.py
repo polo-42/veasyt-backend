@@ -60,21 +60,26 @@ class Room(baseModel):
     @staticmethod
     def getAllFurniture(idRoom):
         request = f"""
-        SELECT catalogue.nom_meuble, furniture.quantite
+        SELECT catalogue.nom_meuble, furniture.quantite, catalogue.largeur, catalogue.longueur, catalogue.hauteur
         FROM Meuble_catalogue AS catalogue, Meuble_client_defaut AS occurence, Meuble_client AS furniture
         WHERE furniture.id_meuble_client = occurence.id_meuble_client
         AND catalogue.id_meuble_catalogue = occurence.id_meuble_catalogue
         AND furniture.id_piece = {idRoom}
         """
         cursor.execute(request)
-        furnitures = [{'furniture_name':f[0], 'quantity': f[1]} for f in cursor.fetchall()]
+        furnitures = [{'furniture_name':f[0], 'quantity': f[1], "volume":((f[2]*f[3]*f[4])/1000000)} for f in cursor.fetchall()]
 
         request = f"SELECT Piece.nom FROM Piece WHERE Piece.id_piece = {idRoom}"
         cursor.execute(request)
         object = cursor.fetchone()
+        
+        total_volume = 0
+        for furniture in furnitures:
+            total_volume += furniture["volume"]
         return {
             'room_name': object[0],
-            'furnitures': furnitures
+            'furnitures': furnitures,
+            "total_volume": total_volume
             }
 
     @staticmethod
