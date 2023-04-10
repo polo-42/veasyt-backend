@@ -1,7 +1,7 @@
 from flask import Flask
 from endpoints.rooms import rooms_endpoint
 from endpoints.catalogue import catalogue_endpoint
-from endpoints.furnitures import inventory_endpoint
+from endpoints.inventory import inventory_endpoint
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
