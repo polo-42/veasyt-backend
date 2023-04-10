@@ -42,6 +42,22 @@ class FurnitureDefault(Furniture):
         furniture = FurnitureDefault(None, data["quantity"], object[0], object[1], object[2], object[3], object[4], data["id_catalogue"], data["id_room"], data["id_unload_address"])
         return furniture
     
+    @staticmethod    
+    def delete(id_meuble_client): #id_furniture
+        request = (f"""
+        DELETE FROM Meuble_client_defaut
+        WHERE id_meuble_client = {id_meuble_client}
+        """)
+        cursor.execute(request)
+        mydb.commit()            
+
+        request = (f"""
+        DELETE FROM Meuble_client
+        WHERE id_meuble_client = {id_meuble_client}
+        """)
+        cursor.execute(request)
+        mydb.commit()
+    
     def save(self):
         request = f"""
         INSERT INTO Meuble_client (est_avance, quantite, id_piece, id_adresse_dechargement) VALUES (0, {self.quantity}, {self.id_room}, {self.id_unload_address})   
@@ -58,8 +74,12 @@ class FurnitureDefault(Furniture):
         """)
         cursor.execute(request)
         mydb.commit()
-        return id_furniture
-    
+
+        #cursor.execute('SELECT LAST_INSERT_ID()')      
+        #id_occurence = cursor.fetchone()[0]
+
+        return id_furniture #id_occurence
+
     def getAll():
         pass
 

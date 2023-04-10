@@ -7,12 +7,19 @@ inventory_endpoint = Blueprint('inventory', __name__)
 
 @inventory_endpoint.route('/', methods=['POST'])
 @cross_origin()
-def roomsAPI():
-
+def insertInventoryAPI():
     if request.method == 'POST':
         furniture = FurnitureDefault.fromjson(request.json)
         id_furniture = furniture.save()
-        return jsonify(id_furniture), 200
+        return jsonify(id_furniture), 201
+
+
+@inventory_endpoint.route('/<id_furniture>', methods=['DELETE'])
+@cross_origin()
+def removeInventoryAPI(id_furniture):
+    if request.method == 'DELETE':
+        result = FurnitureDefault.delete(id_furniture)
+        return 'Furniture deleted', 204
     
     #else :
     #    rooms = Room.getAll('id_adresse_chargement = 4')

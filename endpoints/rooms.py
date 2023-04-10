@@ -15,14 +15,17 @@ def roomsAPI():
     else:
         room = Room.fromjson(request.json)
         idroom = room.save()
-        return jsonify(idroom), 200
+        return jsonify(idroom), 201
 
-@rooms_endpoint.route('/<idroom>')
+@rooms_endpoint.route('/<id_room>', methods=['GET','DELETE'])
 @cross_origin()
-def roomAPI(idroom):
-    furnitures = Room.getAllFurniture(idroom)
-    return jsonify(furnitures), 200
-
+def roomAPI(id_room):
+    if request.method == 'GET':
+        furnitures = Room.getAllFurniture(id_room)
+        return jsonify(furnitures), 200
+    else:
+        Room.delete(id_room)
+        return "Room deleted", 204
 
     #/rooms/id_token=fnslijfosdjfa&id_address = 4
     #

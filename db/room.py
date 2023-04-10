@@ -1,5 +1,6 @@
 import mysql.connector, json
 from db.base import baseModel
+from db.furniture import FurnitureDefault
 
 mydb = mysql.connector.connect(
     host="amenitydev-veasyt.mysql.database.azure.com",
@@ -67,7 +68,7 @@ class Room(baseModel):
         AND furniture.id_piece = {idRoom}
         """
         cursor.execute(request)
-        furnitures = [{'furniture_name':f[0], 'quantity': f[1], "volume":((f[2]*f[3]*f[4])/1000000)} for f in cursor.fetchall()]
+        furnitures = [{'furniture_name':f[0], 'quantity': f[1], "volume":((f[1]*f[2]*f[3]*f[4])/1000000)} for f in cursor.fetchall()]
 
         request = f"SELECT Piece.nom FROM Piece WHERE Piece.id_piece = {idRoom}"
         cursor.execute(request)
@@ -81,6 +82,37 @@ class Room(baseModel):
             'furnitures': furnitures,
             "total_volume": total_volume
             }
+    
+    @staticmethod    
+    def delete(idRoom):
+        request = (f"""
+        SELECT id_meuble_client
+        FROM Meuble_client
+        WHERE Meuble_client.id_piece = {idRoom}
+        """)
+        cursor.execute(request)
+        furnitures = cursor.fetchall()
+        for furniture in furnitures:
+            request = (f"""
+            DELETE FROM Meuble_client_defaut
+            WHERE id_meuble_client = {furniture[0]}
+            """)
+            cursor.execute(request)
+            mydb.commit()   
+
+        request = (f"""
+        DELETE FROM Meuble_client
+        WHERE Meuble_client.id_piece = {idRoom}
+        """)
+        cursor.execute(request)
+        mydb.commit()   
+
+        request = (f"""
+        DELETE FROM Piece
+        WHERE id_piece = {idRoom}
+        """)
+        cursor.execute(request)
+        mydb.commit()    
 
     @staticmethod
     def getTotalVolume(idRoom):
