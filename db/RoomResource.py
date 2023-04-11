@@ -11,6 +11,7 @@ class RoomResource(BaseResource):
         self.width = width
         self.length = length
 
+# override BaseResource
     @staticmethod
     def get(id):
         cursor = RoomResource.db.cursor()
@@ -64,9 +65,6 @@ class RoomResource(BaseResource):
 
     def delete():
         return RoomResource.notallowed
-
-    def getvolume(self):
-        return sum([f.getvolume() for f in self.furnitures])
     
     def todict(self):
         return {
@@ -75,3 +73,7 @@ class RoomResource(BaseResource):
             'id_load_adress': self.id_load_address,
             'furnitures': [f.todict() for f in self.furnitures]
         }
+    
+# additionnal functionalities
+    def getvolume(self):
+        return sum([f.getvolume() for f in self.furnitures])

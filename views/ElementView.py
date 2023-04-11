@@ -11,10 +11,7 @@ class ElementView(BaseView):
         if element == 404 :
             return ElementView.notfound
         
-        return jsonify(element.todict())
-
-    def patch(self, _):
-        return ElementView.notallowed
+        return self.tojson(element)
     
     def delete(self, id):
         element = self.resource.get(id)
@@ -26,3 +23,9 @@ class ElementView(BaseView):
             return res, 204
         else:
             return ElementView.notallowed
+
+    def patch(self, _):
+        return ElementView.notallowed
+    
+    def post(self, _):
+        return ElementView.notallowed

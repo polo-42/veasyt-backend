@@ -1,4 +1,5 @@
 from flask.views import MethodView
+from flask import jsonify
 
 class BaseView(MethodView):
 
@@ -8,5 +9,8 @@ class BaseView(MethodView):
     def __init__(self, resource):
         self.resource = resource
     
-    def deleted(res):
-        return res, 204
+    def deleted(self, res):
+        return self.tojson(res), 204
+    
+    def tojson(self, element):
+        return jsonify(element.todict())

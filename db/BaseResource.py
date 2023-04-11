@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod, abstractstaticmethod
+from typing import Any
 import mysql.connector
 
 class BaseResource(ABC):
@@ -14,22 +15,22 @@ class BaseResource(ABC):
         )
     
     @abstractstaticmethod
-    def get(id):
+    def get(id: int) -> object|int:
         pass
 
     @abstractstaticmethod
-    def getall():
+    def getall() -> list[object]:
         pass
 
     @abstractstaticmethod   
-    def add(data):
+    def add(data: dict[str,Any]) -> object|int:
         pass
     
     @abstractmethod
-    def delete():
+    def delete() -> object|int:
         pass
 
-    def todict(self):
+    def todict(self) -> dict[str,Any]:
         return {
             k: v 
             for k, v in vars(self).items() 
