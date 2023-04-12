@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, request
 from views.BaseView import BaseView
 
 class ElementView(BaseView):
@@ -19,12 +19,12 @@ class ElementView(BaseView):
         res = element.delete()
         return self.sendresponse(res)
 
-    def patch(self, id, data):
+    def patch(self, id):
         element = self.resource.get(id)
         if element == 404 :
             return ElementView.notfound
     
-        element = element.update(data)
+        element = element.update(request.json)
         return self.sendresponse(element)
         
     

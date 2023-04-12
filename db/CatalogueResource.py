@@ -5,7 +5,9 @@ class CatalogueResource(BaseResource):
         self.id = id
         self.name = name
         self.weight = weight
-        self.dimension = (width,length,height)
+        self.width = width
+        self.length = length 
+        self.height = height
         self.icon = icon
 
     @staticmethod #OK
@@ -24,21 +26,21 @@ class CatalogueResource(BaseResource):
 
     @staticmethod #OK
     def getall(id_category):
-        cursor = CatalogueResource.db.cursor()
-        request = f"""
-            SELECT catalogue.id_meuble_catalogue, nom_meuble, poids, largeur, longueur, hauteur, icone
-            FROM Meuble_catalogue AS catalogue, Meuble_categories AS categories 
-            WHERE categories.id_meuble_catalogue = catalogue.id_meuble_catalogue 
-            AND categories.id_categorie = {id_category}
-        """
-        cursor.execute(request)
-        furnitures = cursor.fetchall()
-        if furnitures == None : return CatalogueResource.notfound
-
-        return [
-            CatalogueResource(furniture[0],furniture[1],furniture[2],furniture[3],furniture[4],furniture[5],furniture[6])
-            for furniture in furnitures
-        ]
+        return CatalogueResource.notallowed
+        #cursor = CatalogueResource.db.cursor()
+        #request = f"""
+        #    SELECT catalogue.id_meuble_catalogue, nom_meuble, poids, largeur, longueur, hauteur, icone
+        #    FROM Meuble_catalogue AS catalogue, Meuble_categories AS categories 
+        #    WHERE categories.id_meuble_catalogue = catalogue.id_meuble_catalogue 
+        #    AND categories.id_categorie = {id_category}
+        #"""
+        #cursor.execute(request)
+        #furnitures = cursor.fetchall()
+        #if furnitures == None : return CatalogueResource.notfound
+        #return [
+        #    CatalogueResource(furniture[0],furniture[1],furniture[2],furniture[3],furniture[4],furniture[5],furniture[6])
+        #    for furniture in furnitures
+        #]
     
     @staticmethod
     def add(data): # name,weight,width,length,height,icon, ID_CATEGORY #TODO: Add checks for empty field --> if only volume is entered
@@ -73,75 +75,70 @@ class CatalogueResource(BaseResource):
 
     def update(self, data): #data = name,weight,width,length,height,icon, ID_CATEGORY --> {"name" : None, "weight" : 50}
         cursor = CatalogueResource.db.cursor()
-        if data["name"] != None : #TODO: CHECK FOR TYPE ERROR?
+        if "name" in data : #TODO: CHECK FOR TYPE ERROR?
             request = f"""
             UPDATE Meuble_catalogue
             SET nom_meuble = '{data["name"]}'
             WHERE id_meuble_catalogue = {self.id}
             """
-        cursor.execute(request)
-        CatalogueResource.db.commit()        
+            cursor.execute(request)
+            CatalogueResource.db.commit()        
         
-        if data["weight"] != None :
+        if "weight" in data:
             request = f"""
             UPDATE Meuble_catalogue
             SET poids = {data["weight"]}
             WHERE id_meuble_catalogue = {self.id}
             """
-        cursor.execute(request)
-        CatalogueResource.db.commit()
+            cursor.execute(request)
+            CatalogueResource.db.commit()
 
-        if data["width"] != None :
+        if 'width' in data:
             request = f"""
             UPDATE Meuble_catalogue
             SET largeur = {data["width"]}
             WHERE id_meuble_catalogue = {self.id}
             """
-        cursor.execute(request)
-        CatalogueResource.db.commit()
+            cursor.execute(request)
+            CatalogueResource.db.commit()
 
-        if data["length"] != None :
+        if 'length' in data:
             request = f"""
             UPDATE Meuble_catalogue
             SET longueur = {data["length"]}
             WHERE id_meuble_catalogue = {self.id}
             """
-        cursor.execute(request)
-        CatalogueResource.db.commit()
+            cursor.execute(request)
+            CatalogueResource.db.commit()
 
-        if data["height"] != None :
+        if "height" in data:
             request = f"""
             UPDATE Meuble_catalogue
             SET hauteur = {data["height"]}
             WHERE id_meuble_catalogue = {self.id}
             """
-        cursor.execute(request)
-        CatalogueResource.db.commit()
+            cursor.execute(request)
+            CatalogueResource.db.commit()
 
-        if data["icon"] != None :
+        if "icon" in data:
             request = f"""
             UPDATE Meuble_catalogue
             SET icone = '{data["icon"]}'
             WHERE id_meuble_catalogue = {self.id}
             """
-        cursor.execute(request)
-        CatalogueResource.db.commit()
+            cursor.execute(request)
+            CatalogueResource.db.commit()
 
-        if data["id_category"] != None :
+        if "id_category" in data:
             request = f"""
             UPDATE Meuble_categories
             SET id_categorie = {data["id_category"]}
             WHERE id_meuble_catalogue = {self.id}
             """
-        cursor.execute(request)
-        CatalogueResource.db.commit()        
+            cursor.execute(request)
+            CatalogueResource.db.commit()        
 
         return CatalogueResource.get(self.id)
-        
-        #def addCategory
-    #def put()
-    #    obj = resource.get(id)
-    #    obj.update(newdata)
 
 class CategoryResource(BaseResource):
     def __init__(self,id,name,class_,catalogue):
@@ -221,9 +218,14 @@ class CategoryResource(BaseResource):
         cursor.execute(request)
         CategoryResource.db.commit()  
 
+        return CategoryResource.get(self.id)
+
     def todict(self):
         return {
                 "id" : self.id,
                 "name" : self.name,
-                "furnitures" : [ f.todict() for f in self.catalogue ]
+                "furnitures" : [ 
+                    f.todict() for f in self.catalogue 
+                    if type(f) is CatalogueResource
+                    ]
             }
