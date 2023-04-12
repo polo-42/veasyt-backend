@@ -1,8 +1,10 @@
 from views.ElementView import ElementView
 from views.CollectionView import CollectionView
 from views.CatalogueView import CatalogueView
+from views.FilterCollectionView import FilterCollectionView
 #from db.RoomResource import RoomResource
 from db.CatalogueResource import CategoryResource, CatalogueResource
+from db.FurnitureResource import FurnitureResource
 
 def initendpoint(app, resource, name, ElView = ElementView, ColView = CollectionView):
     initelement(app,resource,name,ElView)
@@ -23,7 +25,13 @@ def initendpoints(app):
     #SINCE COLLECTION VIEW WAS OVERIDDEN FOR CATALOGUE, AS WE USE AN ARGUMENT "CLASS_" TO FILTER THE COLLECTION VIEW
     #AND SINCE WE USE TWO DIFFERENT RESSOURCES FOR THE SAME ENDPOINT
     #WE MUST INIT THE ELEMENT AND COLLECTION VIEWS SEPARETELY
-    initelement(app, CatalogueResource, 'catalogue')
-    initcollection(app, CatalogueResource, 'catalogue', ColView=CatalogueView)
-    initendpoint(app, CategoryResource, 'categories')
+
+
+    initelement(app, CategoryResource, 'categories')
+    initcollection(app, CategoryResource, 'categories', ColView=FilterCollectionView)
+    
+    initendpoint(app, CatalogueResource, 'catalogue')
+
+    initelement(app, FurnitureResource, 'furnitures')
+    initcollection(app, FurnitureResource, 'furnitures', ColView=FilterCollectionView)
     
