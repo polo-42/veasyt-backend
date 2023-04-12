@@ -14,3 +14,4 @@ class CatalogueView(CollectionView):
         collection = self.resource.getall(class_)
 
         return [ self.tojson(el) for el in collection ]
+    

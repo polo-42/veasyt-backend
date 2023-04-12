@@ -23,7 +23,7 @@ def initendpoints(app):
     #SINCE COLLECTION VIEW WAS OVERIDDEN FOR CATALOGUE, AS WE USE AN ARGUMENT "CLASS_" TO FILTER THE COLLECTION VIEW
     #AND SINCE WE USE TWO DIFFERENT RESSOURCES FOR THE SAME ENDPOINT
     #WE MUST INIT THE ELEMENT AND COLLECTION VIEWS SEPARETELY
-    initendpoint(app, CatalogueResource, 'catalogue')
-    initcollection(app, CategoryResource, 'categories', ColView=CatalogueView)
-    initendpoint(app, CategoryResource, 'category')
+    initelement(app, CatalogueResource, 'catalogue')
+    initcollection(app, CatalogueResource, 'catalogue', ColView=CatalogueView)
+    initendpoint(app, CategoryResource, 'categories')
     
