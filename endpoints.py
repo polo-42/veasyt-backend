@@ -5,6 +5,7 @@ from views.FilterCollectionView import FilterCollectionView
 #from db.RoomResource import RoomResource
 from db.CatalogueResource import CategoryResource, CatalogueResource
 from db.FurnitureResource import FurnitureResource
+from db.AddressResource import AddressResource
 
 def initendpoint(app, resource, name, ElView = ElementView, ColView = CollectionView):
     initelement(app,resource,name,ElView)
@@ -34,4 +35,6 @@ def initendpoints(app):
 
     initelement(app, FurnitureResource, 'furnitures')
     initcollection(app, FurnitureResource, 'furnitures', ColView=FilterCollectionView)
+
+    initelement(app, AddressResource, 'address')    
     
