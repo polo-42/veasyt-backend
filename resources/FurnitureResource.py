@@ -1,13 +1,15 @@
-from db.BaseResource import BaseResource
-from db.CatalogueResource import CatalogueResource   
+from resources.BaseResource import BaseResource
+from resources.CatalogueResource import CatalogueResource   
 
 class FurnitureResource(BaseResource):
+    #TODO: mettre les DDL dans une transaction, regarder comment faire avec mysql.connector
 
     def __init__(self, id, quantity, id_catalogue, id_room, id_unload_address,custom_data=None):
         self.id = id
         self.quantity = quantity
         self.id_room = id_room
         self.id_unload_address = id_unload_address
+        self.id_catalogue = id_catalogue
 
         if custom_data == None:
             catalogue_furniture = CatalogueResource.get(id_catalogue) 
@@ -51,6 +53,7 @@ class FurnitureResource(BaseResource):
 
         custom = default[5]
         if custom == 0:
+            if default[2] == None : return FurnitureResource.notfound
             return FurnitureResource(default[0],default[1],default[2],default[3],default[4])
         
         request = f"""
@@ -60,6 +63,8 @@ class FurnitureResource(BaseResource):
         """
         cursor.execute(request)
         custom = cursor.fetchone()
+
+        if custom is None : return FurnitureResource.notfound
         custom_data = {
             'weight': custom[0],
             'width': custom[1],
@@ -83,12 +88,81 @@ class FurnitureResource(BaseResource):
             WHERE id_piece = {id_room}
         """
         cursor.execute(request)
-        return [
-            FurnitureResource.get(f[0])
-            for f in cursor.fetchall()
-        ]
+        return filter(
+            lambda f : type(f) is FurnitureResource,
+            [ FurnitureResource.get(f[0]) for f in cursor.fetchall() ])
+    
+    @staticmethod
+    def add(data):
+        db = FurnitureResource.db
+        cursor = db.cursor()
+        custom = True if 'is_custom' in data and data['is_custom'] else False
+        
+        request = f"""
+            INSERT INTO Meuble_client (est_avance, quantite, id_piece, id_adresse_dechargement)
+            VALUES ({custom},{data['quantity']},{data['id_room']},{data['id_unload_address']})
+            """
+        cursor.execute(request)
+
+        request = "SELECT LAST_INSERT_ID()"
+        cursor.execute(request)
+        id_furniture = cursor.fetchone()[0]
+
+        if custom:
+            add_info = data['additional_info'].replace("'", "\\'")
+            request = f"""
+            INSERT INTO Meuble_avance (id_meuble_client, poids, largeur, longueur, hauteur, emballage, deballage, remontage, demontage, infos_supplementaires, id_meuble_catalogue)
+            VALUES ({id_furniture},{data['weight']},{data['width']},{data['length']},{data['height']},{data['packing']},{data['unpacking']},{data['disassembly']},{data['reassembly']}, '{add_info}',{data['id_catalogue']})
+            """
+        else:
+            request = f"""
+            INSERT INTO Meuble_client_defaut (id_meuble_client, id_meuble_catalogue)
+            VALUES ({id_furniture}, {data['id_catalogue']})
+            """
+
+        cursor.execute(request)
+        db.commit()
+        return FurnitureResource.get(id_furniture)
+
+    def delete(self):
+        db = FurnitureResource.db
+        cursor = db.cursor()
+
+        if self.is_custom:
+            request = f'DELETE FROM Meuble_avance WHERE id_meuble_client = {self.id}'
+        else:
+            request = f'DELETE FROM Meuble_client_defaut WHERE id_meuble_client = {self.id}'
+        
+        cursor.execute(request)
+
+        request = f'DELETE FROM Meuble_client_defaut WHERE id_meuble_client = {self.id}'
+        cursor.execute(request)
+
+        db.commit()
+        return self
+
+    def update(self, data):
+        db = FurnitureResource.db
+        cursor = db.cursor()
+        make_request = lambda set: f"""
+                UPDATE Meuble_client
+                {set}
+                WHERE id_meuble_client = {self.id}
+            """
+
+        update_attr = lambda attr, value: cursor.execute(make_request(f"SET {attr} = {value}")) 
+
+        if 'quantity' in data : 
+            update_attr('quantite',data['quantity'])
+                
+        db.commit()
+
+        if self.is_custom : return FurnitureResource.get(self.id)
 
 
+
+
+       
 
     def getvolume(self):
         return (self.dimension[0]*self.dimension[1]*self.dimension[2]/1000000)*self.quantity

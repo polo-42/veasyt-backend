@@ -1,4 +1,5 @@
 from views.CollectionView import CollectionView
+from resources.BaseResource import BaseResource
 from flask import request
 
 class FilterCollectionView(CollectionView):
@@ -7,11 +8,15 @@ class FilterCollectionView(CollectionView):
         super().__init__(resource)
 
     def get(self):
-        filter = request.args[
-            [key for key in request.args if 'filterBy' in key][0]
-        ]
-        if filter == None : FilterCollectionView.notallowed
+        key = [key for key in request.args if 'filterBy' in key]
+        filter = None
+        if len(key) >= 1:
+            filter = request.args[key[0]]
+
+        if filter == None : return FilterCollectionView.notallowed
 
         collection = self.resource.getall(filter)
 
-        return [ self.tojson(el) for el in collection ]
+        return [ 
+            self.tojson(el) for el in collection 
+        ]

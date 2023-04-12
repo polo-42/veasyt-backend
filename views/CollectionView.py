@@ -1,5 +1,6 @@
 from flask import jsonify, request
 from views.BaseView import BaseView
+from resources.BaseResource import BaseResource
 
 class CollectionView(BaseView):
 
@@ -9,9 +10,10 @@ class CollectionView(BaseView):
     def get(self):
         collection = self.resource.getall()
 
-        return [ self.tojson(el) for el in collection ]
+        return [ 
+            self.tojson(el) for el in collection 
+        ]
 
-    #ALL COLLECTIONS MUST HAVE AN ADD FUNCTION THAT IS APPLIED TO THE CLASS (STATIC METHOD), THIS WAY WE CAN CALL THE ADD METHOD FOR ALL THE COLLECTION ENDPOINTS EXCEPT OVERRIDES
     def post(self):
         element = self.resource.add(request.json)
         

@@ -1,5 +1,5 @@
-from db.BaseResource import BaseResource
-from db.FurnitureResource import FurnitureResource
+from resources.BaseResource import BaseResource
+from resources.FurnitureResource import FurnitureResource
 
 class RoomResource(BaseResource):
 

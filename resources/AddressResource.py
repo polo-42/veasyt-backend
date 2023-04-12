@@ -1,4 +1,4 @@
-from db.BaseResource import BaseResource
+from resources.BaseResource import BaseResource
 
 class AddressPostalResource(BaseResource):
     def __init__(self,id,date_start,date_end,is_loading,floor,usable_lift,freight_lifter,parking_distance,additional_info,id_visit,id_address_postal,street,number,region,city,country): #TODO: define optionnal fields
@@ -72,7 +72,4 @@ class AddressPostalResource(BaseResource):
         return 200
          
     def update(self, data):
-
-        
-
-    def todict(self) -> dict[str,Any]:
+        pass

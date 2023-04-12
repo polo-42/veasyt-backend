@@ -1,4 +1,4 @@
-from db.BaseResource import BaseResource
+from resources.BaseResource import BaseResource
 
 class CatalogueResource(BaseResource):
     def __init__(self,id,name,weight,width,length,height,icon):
@@ -10,7 +10,7 @@ class CatalogueResource(BaseResource):
         self.height = height
         self.icon = icon
 
-    @staticmethod #OK
+    @staticmethod 
     def get(id_furniture):
         cursor = CatalogueResource.db.cursor()
         request = f"""
@@ -26,24 +26,23 @@ class CatalogueResource(BaseResource):
 
     @staticmethod #OK
     def getall(id_category):
-        return CatalogueResource.notallowed
-        #cursor = CatalogueResource.db.cursor()
-        #request = f"""
-        #    SELECT catalogue.id_meuble_catalogue, nom_meuble, poids, largeur, longueur, hauteur, icone
-        #    FROM Meuble_catalogue AS catalogue, Meuble_categories AS categories 
-        #    WHERE categories.id_meuble_catalogue = catalogue.id_meuble_catalogue 
-        #    AND categories.id_categorie = {id_category}
-        #"""
-        #cursor.execute(request)
-        #furnitures = cursor.fetchall()
-        #if furnitures == None : return CatalogueResource.notfound
-        #return [
-        #    CatalogueResource(furniture[0],furniture[1],furniture[2],furniture[3],furniture[4],furniture[5],furniture[6])
-        #    for furniture in furnitures
-        #]
+        cursor = CatalogueResource.db.cursor()
+        request = f"""
+           SELECT catalogue.id_meuble_catalogue, nom_meuble, poids, largeur, longueur, hauteur, icone
+           FROM Meuble_catalogue AS catalogue, Meuble_categories AS categories 
+            WHERE categories.id_meuble_catalogue = catalogue.id_meuble_catalogue 
+            AND categories.id_categorie = {id_category}
+        """
+        cursor.execute(request)
+        furnitures = cursor.fetchall()
+        if furnitures == None : return CatalogueResource.notfound
+        return [
+            CatalogueResource(furniture[0],furniture[1],furniture[2],furniture[3],furniture[4],furniture[5],furniture[6])
+            for furniture in furnitures
+        ]
     
     @staticmethod
-    def add(data): # name,weight,width,length,height,icon, ID_CATEGORY #TODO: Add checks for empty field --> if only volume is entered
+    def add(data):
         cursor = CatalogueResource.db.cursor()
         request = f"""
         INSERT INTO Meuble_catalogue (nom_meuble, poids, largeur, longueur, hauteur, icone)
@@ -64,18 +63,16 @@ class CatalogueResource(BaseResource):
         cursor.execute(request)
         CatalogueResource.db.commit()
 
-        #cursor.execute('SELECT LAST_INSERT_ID()')      
-        #id_occurence = cursor.fetchone()[0]
-
         return CatalogueResource.get(id_furniture)
         
-    #def delete():
-    #    return CatalogueResource.notallowed
-    #    #TODO: Restrict deletion on default furnitures
+    def delete():
+        #TODO: Restrict deletion on default furnitures
+        return CatalogueResource.notallowed
+    
 
-    def update(self, data): #data = name,weight,width,length,height,icon, ID_CATEGORY --> {"name" : None, "weight" : 50}
+    def update(self, data): 
         cursor = CatalogueResource.db.cursor()
-        if "name" in data : #TODO: CHECK FOR TYPE ERROR?
+        if "name" in data :
             request = f"""
             UPDATE Meuble_catalogue
             SET nom_meuble = '{data["name"]}'
@@ -194,13 +191,14 @@ class CategoryResource(BaseResource):
         id_category = cursor.fetchone()[0]
         return CategoryResource.get(id_category)
     
-    #def delete():
-    #    return CategoryResource.notallowed
-    #    TODO: Restrict deletion on default categories
+    def delete():
+        #TODO: Restrict deletion on default categories
+        return CategoryResource.notallowed
+    
 
-    def update(self, data): #data = name, class
+    def update(self, data): 
         cursor = CategoryResource.db.cursor()
-        if data["name"] != None : #TODO: CHECK FOR TYPE ERROR?
+        if 'name' in data :
             request = f"""
             UPDATE Meuble_categorie
             SET nom_categorie = '{data["name"]}'
@@ -209,7 +207,7 @@ class CategoryResource(BaseResource):
         cursor.execute(request)
         CategoryResource.db.commit()
 
-        if data["class"] != None : #TODO: CHECK FOR TYPE ERROR?
+        if 'class' in data :
             request = f"""
             UPDATE Meuble_categorie
             SET classe = '{data["class"]}'
