@@ -2,12 +2,12 @@ from db.BaseResource import BaseResource
 
 class FurnitureResource(BaseResource):
 
-    def __init__(self,id,quantity,name,weight,width,length,height):
+    def __init__(self,id,quantity,id_catalogue,id_room,id_unload_address):
         self.id = id
         self.quantity = quantity
-        self.name = name
-        self.weight = weight
-        self.dimension = (width,length,height)
+        self.id_catalogue = id_catalogue
+        self.id_room = id_room
+        self.id_unload_address = id_unload_address
 
     @staticmethod
     def get(id):
@@ -27,6 +27,9 @@ class FurnitureResource(BaseResource):
         pass
   
     def delete():
+        pass
+
+    def update(self, data):
         pass
     
     def getvolume(self):
