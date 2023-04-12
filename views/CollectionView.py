@@ -1,5 +1,4 @@
 from flask import jsonify
-from db.BaseResource import BaseResource
 from views.BaseView import BaseView
 
 class CollectionView(BaseView):

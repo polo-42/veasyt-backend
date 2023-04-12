@@ -13,4 +13,4 @@ class BaseView(MethodView):
         return self.tojson(res), 204
     
     def tojson(self, element):
-        return jsonify(element.todict())
+        return element.todict()

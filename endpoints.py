@@ -1,6 +1,8 @@
 from views.ElementView import ElementView
 from views.CollectionView import CollectionView
+from views.CatalogueView import CatalogueView
 from db.RoomResource import RoomResource
+from db.CatalogueResource import CategoryResource
 
 def initendpoint(app, resource, name, ElView = ElementView, ColView = CollectionView):
     collectionapi = ColView.as_view(f'{name}-collection', resource)
@@ -10,3 +12,4 @@ def initendpoint(app, resource, name, ElView = ElementView, ColView = Collection
 
 def initendpoints(app):
     initendpoint(app, RoomResource, 'rooms')
+    initendpoint(app, CategoryResource, 'catalogue', ColView=CatalogueView)

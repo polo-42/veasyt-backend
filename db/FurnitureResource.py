@@ -11,7 +11,12 @@ class FurnitureResource(BaseResource):
 
     @staticmethod
     def get(id):
-        pass
+        cursor = FurnitureResource.db.cursor()
+        cursor.execute(f"""
+            SELECT nom_meuble, poids, largeur, longueur, hauteur, icone 
+            FROM Meuble_catalogue
+            WHERE id_meuble_catalogue = {id}
+        """)
 
     @staticmethod
     def getall():
@@ -25,5 +30,5 @@ class FurnitureResource(BaseResource):
         pass
     
     def getvolume(self):
-        return (self.dimension[0]*self.dimension[1]*self.dimension[2]/1000000)
+        return (self.dimension[0]*self.dimension[1]*self.dimension[2]/1000000)*self.quantity
     
