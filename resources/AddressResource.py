@@ -45,8 +45,6 @@ class AddressResource(BaseResource):
         return filter(
             lambda f : type(f) is AddressResource,
             [AddressResource.get(f[0]) for f in addresses])
-
-        return AddressResource.notallowed
   
     def add(data):
         cursor = AddressResource.db.cursor()
