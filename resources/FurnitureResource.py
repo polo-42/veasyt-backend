@@ -159,11 +159,6 @@ class FurnitureResource(BaseResource):
 
         if self.is_custom : return FurnitureResource.get(self.id)
 
-
-
-
-       
-
     def getvolume(self):
         return (self.dimension[0]*self.dimension[1]*self.dimension[2]/1000000)*self.quantity
 
