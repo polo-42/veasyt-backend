@@ -11,7 +11,6 @@ class RoomResource(BaseResource):
         self.width = width
         self.length = length
 
-# override BaseResource
     @staticmethod
     def get(id):
         cursor = RoomResource.db.cursor()
@@ -23,15 +22,16 @@ class RoomResource(BaseResource):
 
         cursor = RoomResource.db.cursor()
         request = f"""
-            SELECT m.id_meuble_client, m.quantite, c.nom_meuble, c.poids, c.largeur, c.longueur, c.hauteur
-            FROM Meuble_catalogue AS c, Meuble_client_defaut AS d, Meuble_client AS m
-            WHERE m.id_meuble_client = d.id_meuble_client
-            AND c.id_meuble_catalogue = d.id_meuble_catalogue
-            AND m.id_piece = {id}
+            SELECT id_meuble_client
+            FROM Meuble_client
+            WHERE id_piece = {id}
         """
         cursor.execute(request)
 
-        furnitures = [FurnitureResource(f[0],f[1],f[2],f[3],f[4],f[5],f[6]) for f in cursor.fetchall()]
+        furnitures = filter(
+            lambda f: type(f) is FurnitureResource,
+            [FurnitureResource.get(f[0]) for f in cursor.fetchall()]
+                            )
         
         return RoomResource(room[0], room[1], room[2], furnitures)
     
@@ -63,9 +63,32 @@ class RoomResource(BaseResource):
 
         return room
 
-    def delete():
-        return RoomResource.notallowed
-    
+    def delete(self):
+        db = RoomResource.db
+        cursor = db.cursor()
+
+        request = f'DELETE FROM Piece WHERE id_piece = {self.id}'
+        cursor.execute(request)
+        db.commit()
+
+        return self
+
+    def update(self, data):
+        db = RoomResource.db
+        cursor = db.cursor()
+
+        if 'name' in data:
+            name = data['name'].replace("'", "\\'")
+            request = f"""
+                UPDATE Piece
+                SET nom = '{name}'
+                WHERE id_piece = {self.id}
+            """
+            cursor.execute(request)
+        
+        db.commit()
+        return RoomResource.get(self.id)
+
     def todict(self):
         return {
             'id': self.id,

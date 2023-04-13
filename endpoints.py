@@ -28,4 +28,6 @@ def initendpoints(app):
 
     initelement(app, FurnitureResource, 'furnitures')
     initcollection(app, FurnitureResource, 'furnitures', ColView=FilterCollectionView)
+
+    initendpoint(app, RoomResource, 'rooms') #TODO: utiliser la visite pour filtrer les pieces
     

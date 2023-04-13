@@ -142,27 +142,54 @@ class FurnitureResource(BaseResource):
         return self
 
     def update(self, data):
+        #TODO: permettre de transformer un meuble defaut en avance -> (delete->add)
         db = FurnitureResource.db
         cursor = db.cursor()
-        make_request = lambda set: f"""
+
+        if 'quantity' in data : 
+            cursor.execute(f"""
                 UPDATE Meuble_client
+                SET quantite = {data['quantity']}
+                WHERE id_meuble_client = {self.id}
+            """)
+                
+        db.commit()
+
+        if not self.is_custom : return FurnitureResource.get(self.id)
+
+        make_request = lambda set: f"""
+                UPDATE Meuble_avance
                 {set}
                 WHERE id_meuble_client = {self.id}
             """
 
         update_attr = lambda attr, value: cursor.execute(make_request(f"SET {attr} = {value}")) 
 
-        if 'quantity' in data : 
-            update_attr('quantite',data['quantity'])
-                
+        if 'weight' in data :
+            update_attr('poids',data['weight'])
+        if 'length' in data :
+            update_attr('longueur',data['length'])
+        if 'width' in data :
+            update_attr('largeur',data['width'])
+        if 'height' in data :
+            update_attr('hauteur',data['height'])
+        if 'packing' in data :
+            print(data['packing'])
+            update_attr('emballage',data['packing'])
+        if 'unpacking' in data :
+            update_attr('deballage',data['unpacking'])
+        if 'disassembly' in data :
+            update_attr('demontage',data['disassembly'])
+        if 'reassembly' in data :
+            update_attr('remontage',data['reassembly'])
+        if 'additional_info' in data :
+            add_info = data['additional_info'].replace("'", "\\'")
+            update_attr('poids',f"'{add_info}'")
+        
         db.commit()
+        
+        return FurnitureResource.get(self.id)
 
-        if self.is_custom : return FurnitureResource.get(self.id)
-
-
-
-
-       
 
     def getvolume(self):
         return (self.dimension[0]*self.dimension[1]*self.dimension[2]/1000000)*self.quantity
