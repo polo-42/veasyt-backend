@@ -56,8 +56,24 @@ class AddressResource(BaseResource):
         AddressResource.db.commit()
 
         cursor.execute('SELECT LAST_INSERT_ID()')
-        id_address = cursor.fetchone()[0]
-        return AddressResource(id_address,data["street"],data["number"],data["region"],data["city"],data["country"])
+        id_address_postal = cursor.fetchone()[0]
+        
+        if "date_start" in data: #Maybe we should force them to complete all information
+            request = (f"""
+            INSERT INTO Adresse (date_depuis, date_jusqua, is_chargement, etage_logement, ascenseur_utilisable, monte_meuble, distance_parking, info_supplementaire, id_visite, id_adresse_postale) 
+            VALUES ({data["date_start"]},{data["date_end"]},{data["is_loading"]},{data["floor"]},{data["usable_lift"]},{data["freight_lifter"]},{data["parking_distance"]},'{data["additional_info"]}',{data["id_visit"]},{id_address_postal})
+            """)    
+            cursor.execute(request)
+            AddressResource.db.commit()
+            cursor.execute('SELECT LAST_INSERT_ID()')
+            id_address = cursor.fetchone()[0]
+
+            request = (f"""
+            INSERT INTO Piece (nom, id_adresse_chargement) 
+            VALUES ('{data["region"]}',{id_address})
+            """)   #Create an empty room for the loading address
+
+        return AddressResource.get(id_address)
     
     def delete(id_address):
         return AddressResource.notallowed
