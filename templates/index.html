@@ -1,0 +1,211 @@
+{% include 'header.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veasyt Inventory Manager</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .column {
+    padding: 1rem;
+    width: 100%;
+
+  }
+
+  .left{
+    width: 40%;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0px;
+  }
+
+  .middle {
+    width: 40%;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0px;
+  }
+
+  .right {
+    width: 20%;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0px;
+  }
+
+  .furniture-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    cursor: pointer;
+
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2;
+    -webkit-column-gap: 3em;
+    -moz-column-gap: 3em;
+    column-gap: 3em;
+
+    -webkit-column-rule-width: 1px;
+    -moz-column-rule-width: 1px;
+    column-rule-width: 1px;
+    -webkit-column-rule-style: solid;
+    -moz-column-rule-style: solid;
+    column-rule-style: solid;
+    -webkit-column-rule-color: black;
+    -moz-column-rule-color: black;
+    column-rule-color: black;
+    
+    -moz-column-fill: balance;
+    column-fill: balance; 
+
+  }
+
+  .furniture-card.selected {
+    border-color: green;
+  }
+
+  .furniture-card img {
+    width: 100%;
+    height: auto;
+  }
+
+  .furniture-card h3 {
+    margin: 0;
+  }
+
+  .card{
+    background-color: aliceblue;
+    text-align: center;
+    border: 1px solid #000000;
+  }
+
+  .add-btn {
+    display: none;
+    background-color: green;
+    color: white;
+    text-align: center;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    cursor: pointer;
+  }
+
+  .furniture-card.selected .add-btn {
+    display: block;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  form label,
+  form input {
+    margin-bottom: 1rem;
+  }
+
+  .total-cost {
+    font-weight: bold;
+    margin-top: 1rem;
+  }
+
+  .added-furniture {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+  }
+
+  .remove-btn {
+    background-color: red;
+    color: white;
+    text-align: center;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="column left">
+    <h4>Catalogue</h4>
+
+    <!-- Furniture cards go here -->
+    <div class="furniture-card">
+      <!-- <img src="furniture-icon.png" alt="Furniture Icon"> -->
+      {% for furniture in response["furnitures"] %}
+      <div class="card" data-name="furniture" id={{furniture["id"]}}>
+        <h6>{{ furniture["name"] }}</h6>
+        <div class="add-btn" method="post" id={{furniture["keyFrontEnd"]}}  style="display: none;">Add</div>
+      </div>
+      <script>
+        const {{furniture["id"]}} = document.getElementById({{furniture["id"]}});
+        const {{furniture["keyFrontEnd"]}} = document.getElementById({{furniture["keyFrontEnd"]}});
+        {{furniture["id"]}}.addEventListener('click', () => {
+          {{furniture["id"]}}.classList.toggle('selected');
+          {{furniture["keyFrontEnd"]}}.style.display = {{furniture["id"]}}.classList.contains('selected') ? 'block' : 'none';
+        })
+        /*console.log(btn{{furniture["id"]}});*/
+      </script>
+      {% endfor %}
+
+      
+      
+    </div>
+  </div>
+
+  <div class="column middle">
+    <h4>Estimation</h4>
+
+    <form>
+      <label for="truck-consumption">Truck consumption</label>
+      <input type="number" id="truck-consumption" name="truck-consumption">
+
+      <!-- Other form inputs go here -->
+    </form>
+    <p class="total-cost">Total costs: 1000 $</p>
+  </div>
+
+  <div class="column right">
+    <h4>Summary</h4>
+    
+    <div class="added-furniture">
+      <h5>Inventory :</h5>
+
+      {% for furniture in recap["furniture"] %}
+      <div class="card">
+        <h6>{{ furniture["name"] }}</h6>
+        <div class="remove-btn">Remove</div>
+      </div>
+      {% endfor %}
+      
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
+          
+
+
+          
+
+

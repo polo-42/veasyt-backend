@@ -31,10 +31,13 @@ def initendpoints(app):
     initelement(app, FurnitureResource, 'furnitures')
     initcollection(app, FurnitureResource, 'furnitures', ColView=FilterCollectionView)
 
-    initendpoint(app, RoomResource, 'rooms') #TODO: utiliser la visite pour filtrer les pieces
-    
+    initendpoint(app, RoomResource, 'rooms') 
+    #TODO: FilterCollectionView with address (All the rooms of an addresss)
+    #TODO: FilterCollectionView with visit (All the rooms of a visit)
     
     initelement(app, AddressResource, 'addresses')
     initcollection(app, AddressResource, 'addresses', ColView=FilterCollectionView)
 
     initendpoint(app, VisitResource, 'visits')
+    #TODO: FilterCollectionView with client (All the visits of a client)
+    

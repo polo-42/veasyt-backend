@@ -1,6 +1,8 @@
 from resources.BaseResource import BaseResource
 from resources.FurnitureResource import FurnitureResource
 
+#TODO: ADD A VOLUME ATTRIBUTE TO THE ROOM, BEST SOLUTION TO ADD GENERIC VOLUME ?
+
 class RoomResource(BaseResource):
 
     def __init__(self,id,name,id_load_address,furnitures,width=None,length=None):
@@ -36,6 +38,7 @@ class RoomResource(BaseResource):
         return RoomResource(room[0], room[1], room[2], furnitures)
     
     @staticmethod
+    #TODO: FILTER BY ADDRESS
     def getall():
         cursor = RoomResource.db.cursor()
         request = 'SELECT id_piece FROM Piece'

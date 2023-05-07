@@ -1,5 +1,7 @@
 from resources.BaseResource import BaseResource
 
+#COULD BE INTERESTING TO MAKE A RESOURCE ADDRESS_POSTAL AND THEN ADDRESS(ADDRESS_POSTAL)
+
 class AddressResource(BaseResource):
     def __init__(self,id,date_start,date_end,is_loading,floor,usable_lift,freight_lifter,parking_distance,additional_info,id_visit,id_address_postal,street,number,region,city,country): #TODO: define optionnal fields
         self.id = id

@@ -1,0 +1,165 @@
+.logo{
+    width: 140px;
+    height: 47px;
+    vertical-align: middle;
+    margin-left: 20px;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    font-family: sans-serif;
+}
+li {
+    font-size: 24px;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+table {
+    border: solid black;
+    border-width: 5px;
+    margin-bottom: 50px;
+}
+thead{
+    font-size: 25px;
+}
+tbody{
+    font-size: 30px;
+}
+nav.header {
+    height: 100px;
+    line-height: 100px;
+}
+p{
+    font-size: 20px;
+    text-align: justify;
+    background-size: cover;
+    padding: 50px;
+    border-radius: 2%;
+}
+th{
+    font-size: 12px
+}
+table {border: none;}
+.search{
+    margin-top: 25px;
+    margin-bottom: 0;
+}
+#titre{
+    font-size: 45px;
+    font-family: sans-serif;
+    font-weight: 500;
+    padding-left: 50px;
+}
+#nav-mobile{
+    padding-right: 50px;
+}
+#nav-mobile li a{
+    font-size: 20px;
+}
+footer{
+    padding: 50px;
+}
+.titre-page{
+    font-size: 55px;
+}
+
+.input-field label{
+    margin:auto;
+    color:black!important;
+}
+
+.input-field input{
+    border-bottom: 71639e solid !important ;
+}
+
+.input-field input:focus{
+    border-bottom: #71639e solid !important ;
+}
+
+.input-field input:focus + label{
+    color: black!important ;
+}
+
+.input-field input[type=submit]{
+    color: white;
+    border: black solid !important;
+    border-radius: 5%;
+    background-color: #71639e;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    height: 3em;
+}
+
+.input-field input[type=submit]:hover{
+    color: #71639e;
+    background-color: white;
+}
+
+.input-field input[type=checkbox]{
+    background-color: #71639e;
+}
+
+.page-footer {
+    font-size: 24px;
+}
+
+.formulaire{
+    margin-top: 100px;
+    margin-left: 400px;
+}
+
+
+
+.partie.pseudo{
+    font-size: 35px;
+    text-align: justify;
+}
+
+.tile{
+    margin: 0;
+}
+
+.plateau{
+    border-spacing: 0;
+}
+
+.caracteristiques{
+    height: 100px;
+    width: 100%;
+    padding: 10px;
+}
+.caracteristiques img{
+    height: 64px;
+    width: 64px !important;
+}
+.caracteristiques span{
+    font-size: 40px;
+    text-align: center;
+}
+.caracteristiques ul{
+    border : none;
+    font-size: 20px;
+}
+.caracteristiques ul:last-child li{
+    text-align: right;
+}
+#user_balance{
+    background-color: lightgrey;
+    border-radius: 25px;
+    box-shadow: inset 0 3px 6px rgba(0,0,0,0.16), 0 4px 6px rgba(0,0,0,0.45);
+}
+.btn-mandate {
+    font: bold 11px Arial;
+    text-decoration: none;
+    background-color: #71639e;
+    color: white;
+    padding: 6px 18px 6px 18px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+  }

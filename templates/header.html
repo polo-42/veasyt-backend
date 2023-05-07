@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>Veasyt</title>
+    <script type="text/javascript" src="/static/functions.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{{url_for('static', filename='materialize.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='mystyle.css')}}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.ico') }}">
+</head>
+<body class="">
+<nav class="header">
+    <div class="nav-wrapper deep-purple lighten-1">
+
+        <a href="/">    
+                <img src="../static/logo.ico" alt="logo" class="logo">
+        </a>
+
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+
+            <li><a class="white-text" href={{url_for('getInventory')}}>Estimation</a></li> 
+
+            <!-- {% if session['firstname'] is defined %} -->
+
+            <!-- <li><span style="color:aqua" id="name_connected_user" class="lightgrey-text" >{{ session['firstname'] }}</span></li> -->
+
+            <!-- {% endif %}    -->
+
+            <!-- {% if session['id_user'] is not defined %} -->
+
+
+            <!-- <li><a class="white-text" href="connexion">Log in</a></li> -->
+
+            <!-- {% elif session['is_admin'] == 0 %} -->
+
+            <!-- <li><a class="lightgrey-text" href="profiles">View users</a></li>
+            <li><a class="lightgrey-text" href="mandates">View mandates</a></li>
+            <li><a class="lightgrey-text" href="get_cash">Get cash</a></li>
+            <li><a class="lightgrey-text" href="payment">Confirm payment</a></li>
+            <li><a class="lightgrey-text" href="/?deconnexion=1">log out</a></li> -->
+
+            <!-- {% elif session['is_admin'] == 1 %} -->
+
+            <!-- <li><a class="lightgrey-text" href="profiles">View users</a></li>
+            <li><a class="lightgrey-text" href="addmandate">Add mandate</a></li>
+            <li><a class="lightgrey-text" href="mandates">View mandates</a></li>
+            <li><a class="lightgrey-text" href="get_cash">Get cash</a></li>
+            <li><a class="lightgrey-text" href="payment">Confirm payment</a></li>
+            <li><a class="lightgrey-text" href="/?deconnexion=1">log out</a></li> -->
+
+            <!-- {% endif %} -->
+
+        </ul>     
+
+    </div>
+</nav>
+    
